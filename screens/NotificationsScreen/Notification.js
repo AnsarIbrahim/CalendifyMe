@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const CalenderView = () => {
+const Notification = () => {
   return (
     <View>
-      <Text>CalenderView</Text>
+      <Text>Notification</Text>
     </View>
   );
 };
 
-export default CalenderView;
+export default Notification;
 
 const styles = StyleSheet.create({});

@@ -1,7 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-export default function Home({ navigation }) {
+import CalenderView from "../CalenderScreen/CalenderView";
+import AddButton from "../../components/AddBtn/AddButton";
+
+const Home = ({ navigation }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       // your options here
@@ -14,9 +17,15 @@ export default function Home({ navigation }) {
         <View style={styles.line} />
         <Text style={styles.text}>Upcomming</Text>
       </View>
+      <CalenderView />
+      <View style={styles.addButtonContainer}>
+        <AddButton onPress={() => navigation.navigate("EventForm")} />
+      </View>
     </View>
   );
-}
+};
+
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
@@ -40,5 +49,10 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "semibold",
     fontFamily: "open-sans-reg",
+  },
+  addButtonContainer: {
+    position: "absolute",
+    bottom: 50,
+    right: 25,
   },
 });
