@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Text, View, Button, BackHandler } from "react-native";
+import { Text, View, Button, BackHandler } from "react-native";
+import Modal from "react-native-modal";
 
-const Event = ({ navigation }) => {
+const Event = ({ route, navigation }) => {
   const [modalVisible, setModalVisible] = useState(true);
+  const { title, startDate, time, note, people } = route.params;
 
   const closeOnBackPress = () => {
     if (modalVisible) {
@@ -18,25 +20,30 @@ const Event = ({ navigation }) => {
       BackHandler.removeEventListener("hardwareBackPress", closeOnBackPress);
     };
   }, [modalVisible]);
+
   return (
     <View>
       <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        isVisible={modalVisible}
+        onBackdropPress={() => setModalVisible(false)}
+        swipeDirection="down"
+        onSwipeComplete={() => setModalVisible(false)}
+        style={{ justifyContent: "flex-end", margin: 0 }}
       >
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          style={{
+            backgroundColor: "white",
+            padding: 20,
+            borderRadius: 10,
+            height: "100%",
+          }}
         >
-          <View
-            style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}
-          >
-            <Text>This is the Event modal</Text>
-            <Button title="Close" onPress={() => navigation.navigate("Home")} />
-          </View>
+          <Text>Title: {title}</Text>
+          <Text>Day: {day}</Text>
+          <Text>Time: {time}</Text>
+          <Text>Note: {note}</Text>
+          <Text>People: {people}</Text>
+          <Button title="Close" onPress={() => navigation.navigate("Home")} />
         </View>
       </Modal>
     </View>

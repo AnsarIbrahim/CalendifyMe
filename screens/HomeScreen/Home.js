@@ -1,10 +1,12 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Modal } from "react-native";
 
 import CalenderView from "../CalenderScreen/CalenderView";
 import AddButton from "../../components/AddBtn/AddButton";
+import EventForm from "../CalenderScreen/EventForm";
 
 const Home = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       // your options here
@@ -19,7 +21,17 @@ const Home = ({ navigation }) => {
       </View>
       <CalenderView />
       <View style={styles.addButtonContainer}>
-        <AddButton onPress={() => navigation.navigate("EventForm")} />
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <EventForm setModalVisible={setModalVisible} />
+        </Modal>
+        <AddButton onPress={() => setModalVisible(true)} />
       </View>
     </View>
   );

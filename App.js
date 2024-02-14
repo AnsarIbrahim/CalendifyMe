@@ -10,6 +10,7 @@ import { useFonts } from "expo-font";
 import Home from "./screens/HomeScreen/Home";
 import EventForm from "./screens/CalenderScreen/EventForm";
 import Event from "./screens/CalenderScreen/Event";
+import History from "./screens/HistoryScreen/History";
 
 const Stack = createStackNavigator();
 
@@ -35,7 +36,7 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{
+          options={({ navigation }) => ({
             headerTitleAlign: "center",
             headerLeft: () => (
               <Ionicons
@@ -60,62 +61,46 @@ export default function App() {
                     name="refresh-outline"
                     size={24}
                     color="black"
-                    style={{ marginRight: 15 }}
-                    onPress={() => console.log("More icon pressed")}
+                    style={{ marginRight: 15, transform: [{ scaleX: -1 }] }}
+                    onPress={() => navigation.navigate("History")}
                   />
                 </View>
               </React.Fragment>
             ),
-          }}
+          })}
         />
         <Stack.Screen
           name="EventForm"
           component={EventForm}
-          options={({ navigation }) => ({
+          options={() => ({
             headerTitleAlign: "center",
             title: "",
+          })}
+        />
+        <Stack.Screen
+          name="Event"
+          component={Event}
+          options={() => ({
+            headerTitleAlign: "center",
+            title: "",
+            headerLeft: null,
+          })}
+        />
+        <Stack.Screen
+          name="History"
+          component={History}
+          options={({ navigation }) => ({
+            headerTitleAlign: "center",
+            title: "History",
             headerLeft: () => (
               <Ionicons
-                name="close"
+                name="chevron-back"
                 size={24}
                 color="black"
                 style={{ marginLeft: 15 }}
                 onPress={() => navigation.goBack()}
               />
             ),
-            headerRight: () => (
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "blue",
-                  padding: 5,
-                  borderRadius: 125,
-                  marginRight: 10,
-                  width: 75,
-                }}
-                onPress={() => {
-                  navigation.navigate("Event");
-                }}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 15,
-                    textAlign: "center",
-                    fontFamily: "open-sans",
-                  }}
-                >
-                  Create
-                </Text>
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="Event"
-          component={Event}
-          options={({ navigation }) => ({
-            headerTitleAlign: "center",
-            title: "",
           })}
         />
       </Stack.Navigator>
