@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Modal } from "react-native";
 
+import HomeCard from "./HomeCard";
 import CalenderView from "../CalenderScreen/CalenderView";
 import AddButton from "../../components/AddBtn/AddButton";
 import EventForm from "../CalenderScreen/EventForm";
@@ -19,6 +20,7 @@ const Home = ({ navigation }) => {
         <View style={styles.line} />
         <Text style={styles.text}>Upcomming</Text>
       </View>
+      <HomeCard />
       <CalenderView />
       <View style={styles.addButtonContainer}>
         <Modal

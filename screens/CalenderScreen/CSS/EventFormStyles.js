@@ -100,10 +100,30 @@ const styles = StyleSheet.create({
   roundButtonSelected: {
     backgroundColor: "#220080d2",
   },
+  border: {
+    borderColor: "lightgray",
+    borderWidth: 1,
+    borderRadius: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 5,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 1,
+      },
+    }),
+  },
   dateText: {
     fontSize: 10,
     fontFamily: "open-sans-reg",
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
+    textAlign: "center",
   },
   timeText: {
     fontSize: 10,
@@ -123,25 +143,8 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     marginVertical: 1,
   },
-  border: {
-    borderColor: "lightgray",
-    borderWidth: 1,
-    borderRadius: 40,
-    padding: 6,
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 1,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 1,
-      },
-    }),
-  },
   noteContainer: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
   },
   noteInsideContainer: {
     flexDirection: "row",
@@ -154,6 +157,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     marginTop: "1%",
     gap: 10,
+  },
+  closeButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
   },
 });
 

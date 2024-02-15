@@ -3,76 +3,58 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { EventContext } from "../../store/context/event-context";
+import TimeSelection from "../../components/Time/TimeSelection";
+import DateSelection from "../../components/Date/DateSelection";
+import DateHeader from "../../components/Date/DateHeader";
+import Line from "../../components/Line/Line";
+import Icon from "../../components/Icon/Icon";
 import styles from "./CSS/EventFormStyles";
 
-const EventForm = ({ setModalVisible, startDate, endDate }) => {
+const EventForm = ({ setModalVisible, startDate: initialStartDate }) => {
   const navigation = useNavigation();
   const { addEvent } = useContext(EventContext);
   const [isAllDaySelected, setIsAllDaySelected] = useState(false);
 
   const [title, setTitle] = useState("");
-  const [day, setDay] = useState("");
-  const [time, setTime] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(
+    initialStartDate || new Date()
+  );
   const [note, setNote] = useState("");
   const [people, setPeople] = useState("");
-
-  const [showStart, setShowStart] = useState(false);
-  const [showEnd, setShowEnd] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
-  const [mode, setMode] = useState("time");
-
-  const showStartTimepicker = () => {
-    setShowStart(true);
-    setMode("time");
-  };
-
-  const showEndTimepicker = () => {
-    setShowEnd(true);
-    setMode("time");
-  };
-
-  const onChangeStart = (event, selectedDate) => {
-    const currentTime = selectedDate || startTime;
-    setShowStart(false);
-    setStartTime(currentTime);
-  };
-
-  const onChangeEnd = (event, selectedDate) => {
-    const currentTime = selectedDate || endTime;
-    setShowEnd(false);
-    setEndTime(currentTime);
-  };
-
-  const submitHandler = () => {
-    addEvent({ title, day, time, note, people });
-    setTitle("");
-    setDay("");
-    setTime("");
-    setNote("");
-    setPeople("");
-  };
 
   const handleClose = () => {
     setModalVisible(false);
   };
 
   const handleSubmit = () => {
-    setModalVisible(false);
-    submitHandler();
-    navigation.navigate("Event", { title, day, time, note, people });
+    if (title && note && people && selectedDate) {
+      setModalVisible(false);
+      const eventData = {
+        title,
+        selectedDate: selectedDate.toISOString(),
+        startTime: startTime ? startTime.toISOString() : undefined,
+        endTime: endTime ? endTime.toISOString() : undefined,
+        note,
+        people,
+      };
+      addEvent(eventData);
+      navigation.navigate("Event", eventData);
+    } else {
+      alert("Please fill all the fields");
+    }
   };
 
   useEffect(() => {
-    if (title && day && time && note && people) {
+    if ((title && note, people)) {
       setIsAllDaySelected(true);
     } else {
       setIsAllDaySelected(false);
     }
-  }, [title, day, time, note, people]);
+  }, [title, note, people]);
 
   return (
     <View style={styles.container}>
@@ -119,117 +101,49 @@ const EventForm = ({ setModalVisible, startDate, endDate }) => {
         onChangeText={setTitle}
       />
       <View style={styles.line} />
-      <View style={styles.dateTimeHeader}>
-        <View style={styles.timeContainer}>
-          <Ionicons name="time-outline" size={15} color="black" />
-          <Text style={styles.allDayText}>All Day</Text>
-        </View>
-        <View>
-          <TouchableOpacity
-            style={[
-              styles.roundButton,
-              isAllDaySelected && styles.roundButtonSelected,
-            ]}
-            onPress={() => {
-              if (isAllDaySelected) {
-                handleSubmit();
-              }
-            }}
-          >
-            {isAllDaySelected && (
-              <Ionicons name="checkmark" size={10} color="white" />
-            )}
-          </TouchableOpacity>
-        </View>
-      </View>
+      <DateHeader
+        isAllDaySelected={isAllDaySelected}
+        handleSubmit={handleSubmit}
+        text="All Day"
+        Icon={() => <Ionicons name="time-outline" size={15} color="black" />}
+      />
       <View style={styles.dateTimeContainer}>
         <View style={styles.dateContainer}>
-          <View style={styles.border}>
-            <Text style={styles.dateText}>{startDate.toDateString()}</Text>
-          </View>
-          <View style={styles.linesContainer}>
-            <View style={styles.verticalLine} />
-            <View style={styles.verticalLine} />
-            <View style={styles.verticalLine} />
-          </View>
-          <View style={styles.border}>
-            <Text style={styles.dateText}>{endDate.toDateString()}</Text>
-          </View>
+          {selectedDate ? (
+            <View style={styles.border}>
+              <Text style={styles.dateText}>{selectedDate.toDateString()}</Text>
+            </View>
+          ) : (
+            <DateSelection
+              initialDate={selectedDate}
+              onDateChange={setSelectedDate}
+            />
+          )}
+          <Line direction="column" count={3} style={{ height: 20 }} />
+
+          {selectedDate ? (
+            <View style={styles.border}>
+              <Text style={styles.dateText}>{selectedDate.toDateString()}</Text>
+            </View>
+          ) : (
+            <DateSelection
+              initialDate={selectedDate}
+              onDateChange={setSelectedDate}
+            />
+          )}
         </View>
         <View>
-          <View style={styles.border}>
-            <TouchableOpacity onPress={showStartTimepicker}>
-              <Text style={styles.timeText}>
-                {startTime.toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                })}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {showStart && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={startTime}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChangeStart}
-            />
-          )}
-          <View style={styles.linesContainer} />
-          <View style={styles.border}>
-            <TouchableOpacity onPress={showEndTimepicker}>
-              <Text style={styles.timeText}>
-                {endTime.toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                })}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {showEnd && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={endTime}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChangeEnd}
-            />
-          )}
+          <TimeSelection
+            startTime={startTime || new Date()}
+            setStartTime={setStartTime}
+            endTime={endTime || new Date()}
+            setEndTime={setEndTime}
+          />
         </View>
       </View>
       <View style={styles.line} />
       <View style={styles.noteContainer}>
-        <View style={styles.noteInsideContainer}>
-          <View style={{ flexDirection: "column", marginRight: 5 }}>
-            <View
-              style={{
-                width: 12,
-                height: 1.5,
-                backgroundColor: "#000000bf",
-                marginBottom: 4,
-              }}
-            />
-            <View
-              style={{
-                width: 14,
-                height: 1.5,
-                backgroundColor: "#0000007f",
-                marginBottom: 4,
-              }}
-            />
-            <View
-              style={{ width: 7, height: 1.5, backgroundColor: "#000000bf" }}
-            />
-          </View>
-          <Text style={{ color: "black", fontFamily: "open-sans-reg" }}>
-            Add Note
-          </Text>
-        </View>
+        <DateHeader text="Add Note" Icon={() => <Icon />} showButton={false} />
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputNote}
@@ -241,17 +155,17 @@ const EventForm = ({ setModalVisible, startDate, endDate }) => {
         </View>
       </View>
       <View style={[styles.noteContainer, { marginBottom: 30 }]}>
-        <View style={styles.noteInsideContainer}>
-          <MaterialCommunityIcons
-            name="account-multiple-outline"
-            size={20}
-            color="black"
-            style={{ marginRight: 5 }}
-          />
-          <Text style={{ color: "black", fontFamily: "open-sans-reg" }}>
-            Add People
-          </Text>
-        </View>
+        <DateHeader
+          text="Add People"
+          Icon={() => (
+            <MaterialCommunityIcons
+              name="account-multiple-outline"
+              size={20}
+              color="black"
+            />
+          )}
+          showButton={false}
+        />
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}

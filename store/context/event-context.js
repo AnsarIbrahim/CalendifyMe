@@ -10,7 +10,10 @@ const EventContextProvider = (props) => {
   const [events, setEvents] = useState([]);
 
   const addEvent = (event) => {
-    setEvents((currentEvents) => [...currentEvents, event]);
+    setEvents((currentEvents) => {
+      const newEvents = [...currentEvents, event];
+      return newEvents;
+    });
   };
 
   const removeEvent = (eventId) => {
