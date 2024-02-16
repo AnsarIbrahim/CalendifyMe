@@ -1,6 +1,16 @@
-import React, { useState } from "react";
-import { View, Button, TextInput, Image, StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome"; // replace with the actual path to your Icon component
+import React, { useState, useRef } from "react";
+import {
+  View,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import { firebaseConfig } from "../../store/redux/config";
+import firebase from "firebase/compat/app";
 
 import Logo from "../../assets/Logo.png";
 import ImageAsset from "../../assets/Image.png";
@@ -8,21 +18,41 @@ import ImageAsset from "../../assets/Image.png";
 const Auth = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [code, setCode] = useState("");
+  const [verificationId, setVerificationId] = useState(null);
+  const recaptchaVerifier = useRef(null);
 
-  function signInWithPhoneNumber(phoneNumber) {
-    // Logic to sign in with phone number
-  }
+  const sendVerification = async () => {
+    const phoneProvider = new firebase.auth.PhoneAuthProvider();
+    phoneProvider
+      .verifyPhoneNumber(phoneNumber, recaptchaVerifier.current)
+      .then(setVerificationId);
+    setPhoneNumber("");
+  };
 
-  function confirmCode() {
-    try {
-      // Logic to confirm code
-    } catch (error) {
-      console.log("Invalid code.");
-    }
-  }
+  const confirmCode = async () => {
+    const credential = firebase.auth.PhoneAuthProvider.credential(
+      verificationId,
+      code
+    );
+    await firebase
+      .auth()
+      .signInWithCredential(credential)
+      .then(() => {
+        setCode("");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Invalid code");
+      });
+    Alert.alert("Phone authentication successful 👍");
+  };
 
   return (
     <View style={styles.container}>
+      <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={firebaseConfig}
+      />
       <Image source={Logo} style={styles.logo} />
       <Image source={ImageAsset} style={styles.image} />
       <View style={styles.inputContainer}>
@@ -32,19 +62,22 @@ const Auth = () => {
           onChangeText={setPhoneNumber}
           placeholder="Mobile No."
           style={styles.input}
+          keyboardType="phone-pad"
+          autoCompleteType="tel"
         />
       </View>
-      <Button
-        title="Send OTP"
-        onPress={() => signInWithPhoneNumber(phoneNumber)}
-      />
+      <TouchableOpacity onPress={() => sendVerification()}>
+        <Icon name="send" size={20} color="#000" />
+      </TouchableOpacity>
       <TextInput
         value={code}
         onChangeText={setCode}
         placeholder="Enter OTP"
         style={styles.input}
       />
-      <Button title="Login" onPress={() => confirmCode()} />
+      <TouchableOpacity onPress={() => confirmCode()}>
+        <Icon name="check" size={20} color="#000" />
+      </TouchableOpacity>
     </View>
   );
 };
