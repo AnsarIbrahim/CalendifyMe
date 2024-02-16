@@ -1,9 +1,11 @@
+// Import necessary modules
 import { TextInput, View, Text, TouchableOpacity } from "react-native";
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
+// Import local assets and styles
 import { EventContext } from "../../store/context/event-context";
 import TimeSelection from "../../components/Time/TimeSelection";
 import DateSelection from "../../components/Date/DateSelection";
@@ -12,7 +14,15 @@ import Line from "../../components/Line/Line";
 import Icon from "../../components/Icon/Icon";
 import styles from "./CSS/EventFormStyles";
 
+/**
+ * EventForm is a functional component that renders an event creation form.
+ * @param {Object} props - The props object.
+ * @param {Function} props.setModalVisible - The function to call to set the visibility of the modal.
+ * @param {Date} props.startDate - The initial start date to display.
+ * @returns {JSX.Element} A View component with a form for event creation.
+ */
 const EventForm = ({ setModalVisible, startDate: initialStartDate }) => {
+  // Define state variables for the event details
   const navigation = useNavigation();
   const { addEvent } = useContext(EventContext);
   const [isAllDaySelected, setIsAllDaySelected] = useState(false);
@@ -26,6 +36,7 @@ const EventForm = ({ setModalVisible, startDate: initialStartDate }) => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
 
+  // Define functions to close the modal and submit the form
   const handleClose = () => {
     setModalVisible(false);
   };
@@ -48,6 +59,7 @@ const EventForm = ({ setModalVisible, startDate: initialStartDate }) => {
     }
   };
 
+  // Update the isAllDaySelected state variable when the title, note, or people change
   useEffect(() => {
     if ((title && note, people)) {
       setIsAllDaySelected(true);
@@ -56,6 +68,7 @@ const EventForm = ({ setModalVisible, startDate: initialStartDate }) => {
     }
   }, [title, note, people]);
 
+  // Render a form for event creation
   return (
     <View style={styles.container}>
       <View style={styles.containerHeader}>
@@ -207,4 +220,5 @@ const EventForm = ({ setModalVisible, startDate: initialStartDate }) => {
   );
 };
 
+// Export the CalendarForm component as default
 export default EventForm;

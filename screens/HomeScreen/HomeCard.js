@@ -1,17 +1,26 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+// Importing necessary modules and components
+import { Text, View, TouchableOpacity } from "react-native";
 import React, { useContext, useState } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
+// Import local assets and styles
 import Calender from "../../components/Calender/Calender";
 import { EventContext } from "../../store/context/event-context";
+import styles from "./CSS/HomeCardStyle";
 
+// HomeCard component to display the list of events
 const HomeCard = () => {
+  // Using context to get the events
   const { events } = useContext(EventContext);
+  // State for controlling the visibility of the calendar
   const [showCalendar, setShowCalendar] = useState(false);
 
+  // If there are no events, display a message
   if (!events.length) {
     return <Text>No events scheduled</Text>;
   }
+
+  // Function to format the time
   const formatTime = (date) => {
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -22,6 +31,7 @@ const HomeCard = () => {
     return hours + "." + minutes;
   };
 
+  // Render the list of events
   return (
     <>
       {events.map((event, index) => {
@@ -84,63 +94,5 @@ const HomeCard = () => {
   );
 };
 
+// Exporting the HomeCard component
 export default HomeCard;
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    padding: 10,
-  },
-  dateText: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 2,
-  },
-  dayShort: {
-    fontSize: 12,
-    fontFamily: "open-sans-reg",
-    color: "gray",
-  },
-  dayContainer: {
-    backgroundColor: "#0000be",
-    padding: 5,
-    width: 25,
-    height: 25,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 20,
-  },
-  day: {
-    fontSize: 10,
-    fontFamily: "open-sans-reg",
-    color: "white",
-    textAlign: "center",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  peopleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "white",
-    width: "90%",
-    padding: 7,
-    borderRadius: 10,
-    gap: 5,
-  },
-  peopleText: {
-    fontSize: 12,
-    fontFamily: "open-sans-reg",
-  },
-  details: {
-    fontSize: 10,
-    fontFamily: "open-sans-reg",
-    color: "gray",
-  },
-  iconContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});

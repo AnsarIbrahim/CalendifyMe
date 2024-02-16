@@ -1,19 +1,31 @@
+// Import necessary modules
 import React, { useState, useEffect } from "react";
 import { Text, View, BackHandler, TouchableOpacity } from "react-native";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
+// Import local assets and styles
 import DateHeader from "../../components/Date/DateHeader";
 import Icon from "../../components/Icon/Icon";
 import Line from "../../components/Line/Line";
 import styles from "./CSS/EventFormStyles";
 
+/**
+ * Event is a functional component that renders an event details modal.
+ * @param {Object} props - The props object.
+ * @param {Object} props.route - The route object.
+ * @param {Object} props.navigation - The navigation object.
+ * @returns {JSX.Element} A View component with a Modal inside.
+ */
 const Event = ({ route, navigation }) => {
+  // Define state variables for the visibility of the modal
   const [modalVisible, setModalVisible] = useState(true);
+  // Destructure the event details from the route params
   const { title, selectedDate, startTime, endTime, note, people } =
     route.params;
 
+  // Format the selected date, start time, and end time, and split the people string into an array
   const startDate = selectedDate
     ? new Date(selectedDate).toLocaleDateString("en-US", {
         weekday: "short",
@@ -26,6 +38,7 @@ const Event = ({ route, navigation }) => {
   const endTimeDate = new Date(endTime);
   const peopleArray = people ? people.split(",") : [];
 
+  // Define a function to close the modal when the back button is pressed
   const closeOnBackPress = () => {
     if (modalVisible) {
       setModalVisible(false);
@@ -34,6 +47,7 @@ const Event = ({ route, navigation }) => {
     return false;
   };
 
+  // Add an event listener for the back button press
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", closeOnBackPress);
     return () => {
@@ -41,6 +55,7 @@ const Event = ({ route, navigation }) => {
     };
   }, [modalVisible]);
 
+  // Render a modal with the event details
   return (
     <View>
       <Modal
@@ -136,4 +151,5 @@ const Event = ({ route, navigation }) => {
   );
 };
 
+// Export the CalendarView component as default
 export default Event;
