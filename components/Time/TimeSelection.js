@@ -1,3 +1,4 @@
+// Import necessary modules from react, react-native and @react-native-community/datetimepicker
 import React, { useState } from "react";
 import {
   View,
@@ -8,33 +9,44 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
+/**
+ * TimeSelection is a functional component that renders a time picker.
+ * @param {Object} props - The props object.
+ * @param {Date} props.startTime - The initial start time to display.
+ * @param {Function} props.setStartTime - The function to call when the start time changes.
+ * @param {Date} props.endTime - The initial end time to display.
+ * @param {Function} props.setEndTime - The function to call when the end time changes.
+ * @returns {JSX.Element} A fragment with two TouchableOpacity components and two DateTimePicker components.
+ */
 const TimeSelection = ({ startTime, setStartTime, endTime, setEndTime }) => {
+  // Define state variables for the visibility of the start and end time pickers, and the mode of the DateTimePicker
   const [showStart, setShowStart] = useState(false);
   const [showEnd, setShowEnd] = useState(false);
   const [mode, setMode] = useState("time");
 
+  // Define functions to show the start and end time pickers
   const showStartTimepicker = () => {
     setShowStart(true);
     setMode("time");
   };
-
   const showEndTimepicker = () => {
     setShowEnd(true);
     setMode("time");
   };
 
+  // Define functions to handle changes to the start and end times
   const onChangeStart = (event, selectedDate) => {
     const currentTime = selectedDate || startTime;
     setShowStart(false);
     setStartTime(currentTime);
   };
-
   const onChangeEnd = (event, selectedDate) => {
     const currentTime = selectedDate || endTime;
     setShowEnd(false);
     setEndTime(currentTime);
   };
 
+  // Render two TouchableOpacity components that show the time pickers when pressed, and two DateTimePicker components
   return (
     <>
       <View style={styles.border}>
@@ -84,8 +96,10 @@ const TimeSelection = ({ startTime, setStartTime, endTime, setEndTime }) => {
   );
 };
 
+// Export the TimeSelection component as default
 export default TimeSelection;
 
+// Define the styles for the border, timeText, and linesContainer
 const styles = StyleSheet.create({
   border: {
     borderColor: "lightgray",

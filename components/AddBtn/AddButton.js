@@ -1,7 +1,14 @@
+// Import necessary modules from react, react-native and @expo/vector-icons
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+/**
+ * AddButton is a functional component that renders a button with a "+" icon.
+ * @param {Object} props - The props object.
+ * @param {Function} props.onPress - The function to call when the button is pressed.
+ * @returns {JSX.Element} A TouchableOpacity component with an Ionicon inside.
+ */
 const AddButton = ({ onPress }) => {
   return (
     <TouchableOpacity style={styles.addButton} onPress={onPress}>
@@ -10,8 +17,10 @@ const AddButton = ({ onPress }) => {
   );
 };
 
+// Export the AddButton component as default
 export default AddButton;
 
+// Define the styles for the AddButton and the Ionicon
 const styles = StyleSheet.create({
   addButton: {
     backgroundColor: "blue",

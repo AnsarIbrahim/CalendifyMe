@@ -1,24 +1,32 @@
+// Importing necessary modules and components
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Modal } from "react-native";
+import { View, Text, Modal } from "react-native";
 
+// Import local assets and styles
 import HomeCard from "./HomeCard";
 import CalenderView from "../CalenderScreen/CalenderView";
 import AddButton from "../../components/AddBtn/AddButton";
 import EventForm from "../CalenderScreen/EventForm";
+import styles from "./CSS/HomeStyle";
 
+// Home component to display the home screen
 const Home = ({ navigation }) => {
+  // State for controlling the visibility of the modal
   const [modalVisible, setModalVisible] = useState(false);
+
+  // Use layout effect to set navigation options
   React.useLayoutEffect(() => {
     navigation.setOptions({
       // your options here
     });
   }, [navigation]);
 
+  // Render the home screen
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={styles.line} />
-        <Text style={styles.text}>Upcomming</Text>
+        <Text style={styles.text}>Upcoming</Text>
       </View>
       <HomeCard />
       <CalenderView />
@@ -39,34 +47,5 @@ const Home = ({ navigation }) => {
   );
 };
 
+// Exporting the Home component
 export default Home;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#efefef",
-  },
-  innerContainer: {
-    padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  line: {
-    height: 30,
-    width: 3,
-    backgroundColor: "blue",
-    marginRight: 10,
-    borderRadius: 5,
-  },
-  text: {
-    fontSize: 24,
-    color: "black",
-    fontWeight: "semibold",
-    fontFamily: "open-sans-reg",
-  },
-  addButtonContainer: {
-    position: "absolute",
-    bottom: 50,
-    right: 25,
-  },
-});

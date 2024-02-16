@@ -1,7 +1,15 @@
+// Import necessary modules from react, react-native and react-native-calendars
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
 import React from "react";
 import { Calendar } from "react-native-calendars";
 
+/**
+ * Calender is a functional component that renders a modal with a calendar inside.
+ * @param {Object} props - The props object.
+ * @param {boolean} props.modalVisible - The visibility state of the modal.
+ * @param {Function} props.setModalVisible - The function to toggle the visibility of the modal.
+ * @returns {JSX.Element} A Modal component with a TouchableOpacity and a Calendar inside.
+ */
 const Calender = ({ modalVisible, setModalVisible }) => {
   return (
     <Modal
@@ -35,8 +43,10 @@ const Calender = ({ modalVisible, setModalVisible }) => {
   );
 };
 
+// Export the Calender component as default
 export default Calender;
 
+// Define the styles for the centeredView and the modalView
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
